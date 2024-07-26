@@ -95,9 +95,9 @@ function Home() {
                     </TableContainer>
                </Box>
 <div>
-     <button onClick={nextPage}>Next</button> 
+     <button>Next</button> 
 
-     <button onClick={pevicePage}>Previce</button>
+     <button>Previce</button>
 </div>
 
                <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>

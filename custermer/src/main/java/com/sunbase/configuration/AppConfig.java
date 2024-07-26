@@ -62,7 +62,14 @@ public class AppConfig {
                         }
                     });
                 }) .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST , "/auth/singUp").permitAll()
-                        .requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll())
+                        .requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll()
+                        .requestMatchers(HttpMethod.GET,"/*").permitAll()
+                        .requestMatchers(HttpMethod.PUT,"/*").permitAll()
+                        .requestMatchers(HttpMethod.DELETE,"/*").permitAll()
+                        .requestMatchers(HttpMethod.POST,"/*").permitAll())
+
+
+
                 .csrf(csrf -> csrf.disable())
                 .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
