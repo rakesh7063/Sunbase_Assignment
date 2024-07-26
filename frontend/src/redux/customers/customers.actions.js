@@ -136,66 +136,45 @@ export const udpateCustomerAction = (toastMsg, customerId, update) => async (dis
      }
 }
 
-export const syncCustomerAction = (toastMsg)=> async (dispatch)=>{
-     if(!toastMsg) return;
-     // dispatch({type : customersTypes.CUSTOMER_LOADING})
-     try{
-          const res = await fetch("http://localhost:8080/sync-customers",{
-               method:"POST",
-               headers:{
-                    'Content-Type': 'application/json'
-               }
-          })
-          let data = await res.json();
-
-     }
-     catch(error){
-          console.log(error);
-     }
-}
-
-
-
-
 
 /**
  * sync  Customer's credentials
  * @param {Function} toastMsg - A function which will show the toast message.
  * */
-//  export const syncCustomerAction = (toastMsg) => async (dispatch) => {
-//      if (!toastMsg) return;
+ export const syncCustomerAction = (toastMsg) => async (dispatch) => {
+     if (!toastMsg) return;
 
-//      dispatch({ type: customersTypes.CUSTOMER_LOADING });
-//      try {
-//           const res = await fetch(`http://localhost:8080/sync-customers`, {
-//                method: "POST",
+     dispatch({ type: customersTypes.CUSTOMER_LOADING });
+     try {
+          const res = await fetch(`http://localhost:8080/sync-customers`, {
+               method: "POST",
               
-//                headers: {
-//                     'Content-Type': 'application/json',
-//                     'Bearer': localStorage.getItem("TOKEN")
-//                }
-//           });
-//           const data = await res.json();
+               headers: {
+                    'Content-Type': 'application/json',
+                    'Bearer': localStorage.getItem("TOKEN")
+               }
+          });
+          const data = await res.json();
           
-//           if (res.ok) {
-//                dispatch(getAllCustomersAction(toastMsg,null,null))
-//                toastMsg({
-//                     title: data,
-//                     status: 'success',
-//                })
-//           } else {
-//                dispatch({ type: customersTypes.CUSTOMER_ERROR })
-//                toastMsg({
-//                     title: data,
-//                     status: 'error',
-//                })
-//           }
-//      } catch (error) {
-//           console.log('error:', error)
-//           dispatch({ type: customersTypes.CUSTOMER_ERROR })
-//           toastMsg({
-//                title: error.message,
-//                status: 'error',
-//           })
-//      }
-// }
+          if (res.ok) {
+               dispatch(getAllCustomersAction(toastMsg,null,null))
+               toastMsg({
+                    title: data,
+                    status: 'success',
+               })
+          } else {
+               dispatch({ type: customersTypes.CUSTOMER_ERROR })
+               toastMsg({
+                    title: data,
+                    status: 'error',
+               })
+          }
+     } catch (error) {
+          console.log('error:', error)
+          dispatch({ type: customersTypes.CUSTOMER_ERROR })
+          toastMsg({
+               title: error.message,
+               status: 'error',
+          })
+     }
+}
