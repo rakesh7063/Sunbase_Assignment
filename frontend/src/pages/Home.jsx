@@ -2,12 +2,12 @@ import { Badge, Box, Button, HStack, Input, InputGroup, Modal, ModalBody, ModalC
 import { useCallback, useEffect, useState } from "react";
 import { useDispatch, useSelector } from "react-redux";
 import useToastMsg from '../customHooks/useToastMsg';
-import { getAllCustomersAction, udpateCustomerAction } from '../redux/customers/customers.actions';
+import { deleteCustomerAction, getAllCustomersAction, udpateCustomerAction } from '../redux/customers/customers.actions';
 import Loading from '../components/Loading';
 import style from '../styles/Home.module.css';
 import { HiPencil } from 'react-icons/hi2';
 import { TiDelete } from "react-icons/ti";
-
+// import { useState } from 'react';
 
 
 function Home() {
@@ -16,8 +16,10 @@ function Home() {
      const { loading, customers } = useSelector(store => store.customersManager);
      const { isOpen, onOpen, onClose } = useDisclosure()
      const [updateCustomer, setUpdateCustomer] = useState();
+     const [searchKey, setSearchKey] = useState();
+     const [searchValue, setSearchValue] = useState();
 
-
+   // update customer  
      const handleSubmit = (e) => {
           e.preventDefault();
           const form = e.target;
@@ -35,10 +37,13 @@ function Home() {
           dispatch(udpateCustomerAction(toastMsg, updateCustomer.id, update))
           onClose();
      }
+          const deleteCustomer = (id) =>{
+               dispatch(deleteCustomerAction(toastMsg,id));
 
+     }
 
      useEffect(() => {
-          dispatch(getAllCustomersAction(toastMsg))
+          dispatch(getAllCustomersAction(toastMsg,searchKey,searchValue))
      }, [])
 
      return loading ? <Loading /> : (
@@ -76,7 +81,7 @@ function Home() {
                                              <Td>{el.phone}</Td>
                                              <Td>
                                                   <HStack spacing='2'>
-                                                       <TiDelete role="button" size='25px' color="red" />
+                                                       <TiDelete role="button" size='25px' color="red"  onClick={()=>deleteCustomer(el.id)} />
                                                        <HiPencil role="button" size="20px" color="#3c82be" onClick={() => {
                                                             onOpen()
                                                             setUpdateCustomer(el)
@@ -89,7 +94,11 @@ function Home() {
                          </Table>
                     </TableContainer>
                </Box>
+<div>
+     <button onClick={nextPage}>Next</button> 
 
+     <button onClick={pevicePage}>Previce</button>
+</div>
 
                <Modal isOpen={isOpen} onClose={onClose} isCentered={true}>
                     <ModalOverlay />

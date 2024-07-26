@@ -30,6 +30,8 @@ public class SyncController {
     @PostMapping("/sync-customers")
     public ResponseEntity<String> syncCustomers() {
         String token = authenticate();
+
+        System.out.println("inside sync method");
         if (token == null) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Authentication failed");
         }
@@ -37,6 +39,7 @@ public class SyncController {
         return ResponseEntity.ok("Customers synchronized successfully");
     }
 
+    // call remote api to get access token
     private String authenticate() {
         String url = "https://qa.sunbasedata.com/sunbase/portal/api/assignment_auth.jsp";
         HttpHeaders headers = new HttpHeaders();
@@ -45,7 +48,7 @@ public class SyncController {
 
         HttpEntity<String> request = new HttpEntity<>(body, headers);
         ResponseEntity<Map> response = restTemplate.postForEntity(url, request, Map.class);
-
+    // get access token
         if (response.getStatusCode() == HttpStatus.OK && response.getBody() != null) {
             Object token = response.getBody().get("access_token");
             if (token != null) {
@@ -59,6 +62,7 @@ public class SyncController {
         return null;
     }
 
+    // call remote api to get customer list and insert ar update customer
     private void fetchAndSaveCustomers(String token) {
         String url = "https://qa.sunbasedata.com/sunbase/portal/api/assignment.jsp";
         HttpHeaders headers = new HttpHeaders();

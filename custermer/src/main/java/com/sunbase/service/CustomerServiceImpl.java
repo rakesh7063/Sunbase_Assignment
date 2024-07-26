@@ -19,7 +19,7 @@ public class CustomerServiceImpl implements CustomerService{
 
     private static final String PREFIX = "test";
     private static final String ALPHANUMERIC_CHARACTERS = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
-
+// auto generate uuid with prefix test
     public static String generateUuidWithPrefix() {
         // Generate a random alphanumeric string
         String uuid = generateRandomAlphanumeric(10); // Adjust length as needed
@@ -44,6 +44,8 @@ public class CustomerServiceImpl implements CustomerService{
 
         return sb.toString();
     }
+
+    // call remote api and update and save our database
     @Override
     public void saveOrUpdateCustomer(Customer customer) {
         Optional<Customer> existingCustomer = customerRepository.findByUuid(customer.getUuid());
@@ -63,15 +65,18 @@ public class CustomerServiceImpl implements CustomerService{
         }
     }
 
+    // get all customer with pagination, searching and sorting
     @Override
     public Page<Customer> getCustomers(String firstName, String city, String email, String phone, Pageable pageable) {
         return customerRepository.findAllWithFilter(firstName, city, email, phone, pageable);
     }
 
+    // update customer with id
     @Override
     public Customer updateCustomerById(Long id,Customer updateCustomer) throws CustomerException {
         Customer exstingCustomer = customerRepository.findById(id)
                 .orElseThrow(()-> new CustomerException("Customer not found with id "+ id));
+
        exstingCustomer.setFirstName(updateCustomer.getFirstName());
        exstingCustomer.setLastName(updateCustomer.getLastName());
         exstingCustomer.setAddress(updateCustomer.getAddress());

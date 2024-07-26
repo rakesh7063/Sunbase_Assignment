@@ -18,7 +18,7 @@ import java.util.List;
 public class CustomerController {
     @Autowired
     private CustomerService customerService;
-
+    // get all list controller have pagination, search and sorting
     @GetMapping("/all")
     public ResponseEntity<Page<Customer>> getAllCustomerList (@RequestParam(required = false) String firstName,
                                                               @RequestParam(required = false) String city,
@@ -38,7 +38,7 @@ public class CustomerController {
 
    @PostMapping("/save")
     public ResponseEntity<Customer> addCustomerHandle(@Valid @RequestBody Customer customer){
-        return  new ResponseEntity<>(customerService.addCustomer(customer),HttpStatus.CREATED);
+        return  new ResponseEntity<>(customerService.addCustomer(customer),HttpStatus.OK);
    }
    @PutMapping("/update/{id}")
     public ResponseEntity<Customer> updateCustomerHandle(@Valid @RequestBody Customer customer, @PathVariable Long id){
@@ -47,7 +47,7 @@ public class CustomerController {
    @DeleteMapping("/delete/{id}")
    public ResponseEntity<Customer> deleteCustomerHandle(@PathVariable Long id){
 
-        return new ResponseEntity<>(customerService.deleteCustomerById(id),HttpStatus.ACCEPTED);
+        return new ResponseEntity<>(customerService.deleteCustomerById(id),HttpStatus.OK);
    }
    @GetMapping("/{id}")
    public ResponseEntity<Customer> getCustomerHandle(@PathVariable Long id){

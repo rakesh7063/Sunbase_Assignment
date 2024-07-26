@@ -4,22 +4,29 @@ import style from '../styles/Home.module.css';
 import { useSelector } from 'react-redux';
 import { flushSync } from 'react-dom';
 import { useState } from 'react';
-
-
+import useToastMsg from '../customHooks/useToastMsg';
+import { useDispatch } from "react-redux";
+import { getAllCustomersAction, syncCustomerAction} from '../redux/customers/customers.actions';
 
 function Navbar() {
+     const dispatch = useDispatch();
      const { isOpen, onOpen, onClose } = useDisclosure();
      const { isAuth } = useSelector(store => store.authManager);
-     const [fiterVale, setFiterValue] = useState();
-
+     const [searchKey, setSearchKey] = useState(null);
+     const [searchValue,setSearchValue] = useState(null);
+     const toastMsg = useToastMsg();
      const handleSubmit = () => {
 
      }
+   // search handle  
      const SearchHandle =(e)=>{
-const value = e.target.value;
-
-const res = fetch()
+setSearchValue(e.target.value);
+dispatch(getAllCustomersAction(toastMsg,searchKey,searchValue))
      }
+   
+  const syncCustomer = ()=>{
+       dispatch(syncCustomerAction(toastMsg))
+  }
 
      return (
           true ? <>
@@ -38,7 +45,7 @@ const res = fetch()
                     </Box>
                     <Flex gap={4} alignItems='center'>
                          <Button variant='solid' colorScheme='teal' minWidth='max-content' onClick={onOpen}>Add Customer</Button>
-                         <Select placeholder='Search by' size='md' width='auto' onChange={(e)=>setFiterValue(e.target.value) }>
+                         <Select placeholder='Search by' size='md' width='auto' onChange={(e)=>setSearchKey(e.target.value) }>
                               <option value="firstName">First name</option>
                               <option value="city">City</option>
                               <option value="email">Email</option>
@@ -50,7 +57,7 @@ const res = fetch()
                               </InputRightElement>
                               <Input type='search' placeholder='John' onChange={SearchHandle}/>
                          </InputGroup>
-                         <Button variant='solid' colorScheme='teal' loadingText="Sync...">Sync</Button>
+                         <Button variant='solid' colorScheme='teal' loadingText="Sync..." onClick={syncCustomer}>Sync</Button>
                          <Button variant='outline' colorScheme='teal' marginLeft='auto'>Log out</Button>
                     </Flex>
                </Box>

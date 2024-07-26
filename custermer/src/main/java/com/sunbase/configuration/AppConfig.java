@@ -23,6 +23,7 @@ import java.util.List;
 
 @Configuration
 public class AppConfig {
+    // use restTemplate for microservice;
     @Bean
     public RestTemplate restTemplate() {
         RestTemplate restTemplate = new RestTemplate();
@@ -40,7 +41,7 @@ public class AppConfig {
         restTemplate.getMessageConverters().add(converter);
         return restTemplate;
     }
-
+// security configuration
     @Bean
     public SecurityFilterChain configuration(HttpSecurity http) throws Exception {
 
@@ -61,13 +62,7 @@ public class AppConfig {
                         }
                     });
                 }) .authorizeHttpRequests(auth -> auth.requestMatchers(HttpMethod.POST , "/auth/singUp").permitAll()
-                        .requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/all").permitAll()
-                         .requestMatchers(HttpMethod.POST, "/save").permitAll()
-                        .requestMatchers(HttpMethod.PUT, "/update/*").permitAll()
-                        .requestMatchers(HttpMethod.DELETE, "/delete/*").permitAll()
-                        .requestMatchers(HttpMethod.POST, "/sync-customers\"").permitAll()
-                        .anyRequest().authenticated())
+                        .requestMatchers("/swagger-ui*/**","/v3/api-docs/**").permitAll())
                 .csrf(csrf -> csrf.disable())
                 .addFilterAfter(new JwtTokenGeneratorFilter(), BasicAuthenticationFilter.class)
                 .addFilterBefore(new JwtTokenValidatorFilter(), BasicAuthenticationFilter.class)
